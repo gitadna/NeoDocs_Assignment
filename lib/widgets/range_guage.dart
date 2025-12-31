@@ -29,18 +29,14 @@ class RangeGauge extends StatelessWidget {
           final width = constraints.maxWidth;
           final percent = (v - min) / (max - min);
           final pointerX = width * percent;
-
-          /// Determine active range color
           final activeRange = ranges.firstWhere(
             (r) => v >= r.min && v <= r.max,
             orElse: () => ranges.first,
           );
           final activeColor = _parseColor(activeRange.color);
-
           return Stack(
             clipBehavior: Clip.none,
             children: [
-              /// 🔘 FULL GREY TRACK
               Positioned(
                 top: 36,
                 left: 0,
@@ -53,8 +49,6 @@ class RangeGauge extends StatelessWidget {
                   ),
                 ),
               ),
-
-              /// 🟢 VALUE FILL (up to pointer)
               Positioned(
                 top: 36,
                 left: 0,
@@ -67,20 +61,17 @@ class RangeGauge extends StatelessWidget {
                   ),
                 ),
               ),
-
-              /// 🔺 ARROW POINTER
               Positioned(
-                top: 32,
+                top: 20,
                 left: pointerX - 8,
                 child: CustomPaint(
-                  size: const Size(16, 14),
+                  size: const Size(18, 18),
                   painter: _ArrowPainter(color: activeColor),
                 ),
               ),
-
-              /// 🔢 VALUE TEXT
               Positioned(
-                top: 0,
+                top: -8,
+                bottom: 0,
                 left: pointerX - 12,
                 child: Text(
                   v.toInt().toString(),
@@ -91,8 +82,6 @@ class RangeGauge extends StatelessWidget {
                   ),
                 ),
               ),
-
-              /// 📏 TICKS + LABELS (based on ranges)
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -154,9 +143,9 @@ class _ArrowPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final path = Path()
-      ..moveTo(0, 0)
-      ..lineTo(size.width, size.height / 2)
-      ..lineTo(0, size.height)
+      ..moveTo(size.width / 2, size.height)
+      ..lineTo(0, 0)
+      ..lineTo(size.width, 0)
       ..close();
 
     canvas.drawPath(path, paint);
